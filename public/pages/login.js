@@ -1,33 +1,33 @@
 const Login = {
 	template: `
-	<div class="container mt-5">
-	<div class="cool-box p-4">
-	<h1 class="text-center mb-4">login</h1>
-	<form @submit.prevent="handlelogin" class="mx-auto" style="max-width: 400px;">
-	<div class="mb-3">
-	<label for="username" class="form-label">username</label>
-	<input type="text" v-model="username" class="form-control" required>
-	</div>
-	<div class="mb-3">
-	<label for="password" class="form-label">password</label>
-	<input type="password" v-model="password" class="form-control" required>
-	</div>
-	<button type="submit" class="btn btn-primary w-100">Login</button>
-	</form>
-	<p class="text-center mt-3">non hai un account? <router-link to="/signup">registrati</router-link></p>
-	</div>
+	<div class="container mt-4 col-4">
+		<div class="p-4">
+			<h1 class="text-center mb-4">login</h1>
+			<form @submit.prevent="handlelogin" class="shadow p-4" style="max-width: 400px;">
+				<div class="mb-4">
+					<label for="username" class="form-label">username</label>
+					<input type="text" v-model="username" class="form-control" required>
+				</div>
+				<div class="mb-4">
+					<label for="password" class="form-label">password</label>
+					<input type="password" v-model="password" class="form-control" required>
+				</div>
+				<button type="submit" class="btn btn-primary w-100 shadow">Login</button>
+			</form>
+			<p class="text-center mt-3">non hai un account? <router-link to="/signup">registrati</router-link></p>
+		</div>
 
-	<div class="toast-container position-fixed bottom-0 end-0 p-3">
-	<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" ref="loginToast">
-	<div class="toast-header">
-	<strong class="me-auto">Notification</strong>
-	<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-	</div>
-	<div class="toast-body">
-	{{ toastMessage }}
-	</div>
-	</div>
-	</div>
+		<div class="toast-container position-fixed bottom-0 end-0 p-3">
+			<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" ref="loginToast">
+				<div class="toast-header">
+					<strong class="me-auto">Notification</strong>
+					<button type="button" class="btn btn-close shadow" data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+				<div class="toast-body">
+					{{ toastMessage }}
+				</div>
+			</div>
+		</div>
 
 	</div>
 	`,

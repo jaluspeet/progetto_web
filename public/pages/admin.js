@@ -1,50 +1,49 @@
 const Admin = {
 	template: `
-	<div class="container mt-5">
-	<div class="cool-box d-flex justify-content-between align-items-center mb-4 p-3">
-	<h1>pannello di controllo</h1>
-	<button @click="logout" class="btn btn-danger">logout</button>
-	</div>
+	<div class="container mt-4">
+		<div class="jumbotron d-flex mb-4 p-3 justify-content-between align-items-center">
+			<h1 class="mb-0">pannello di controllo</h1>
+			<button @click="logout" class="btn btn-danger shadow">logout</button>
+		</div>
 
-	<div class="cool-box p-3">
-	<table class="table">
-	<thead>
-	<tr>
-	<th>id</th>
-	<th>username</th>
-	<th>email</th>
-	<th>is admin</th>
-	<th>actions</th>
-	</tr>
-	</thead>
-	<tbody>
-	<tr v-for="user in users" :key="user.id">
-	<td>{{ user.id }}</td>
-	<td>{{ user.username }}</td>
-	<td>{{ user.email }}</td>
-	<td>{{ user.is_admin ? 'yes' : 'no' }}</td>
-	<td>
-	<button v-if="!user.is_admin" @click="promoteuser(user.id)" class="btn btn-warning btn-sm m-2">promuovi</button>
-	<button	@click="deleteuser(user.id)" class="btn btn-danger btn-sm m-2">elimina</button>
-	<button	@click="viewUserNotes(user.id)"	class="btn btn-info btn-sm m-2">visualizza note</button>
-	</td>
-	</tr>
-	</tbody>
-	</table>
-	</div>
+		<div class="shadow p-3">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>username</th>
+						<th>email</th>
+						<th>amministratore</th>
+						<th>opzioni</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="user in users" :key="user.id">
+						<td>{{ user.id }}</td>
+						<td>{{ user.username }}</td>
+						<td>{{ user.email }}</td>
+						<td>{{ user.is_admin ? 'yes' : 'no' }}</td>
+						<td>
+						<button v-if="!user.is_admin" @click="promoteuser(user.id)" class="btn btn-warning m-2 shadow">promuovi</button>
+						<button	@click="deleteuser(user.id)" class="btn btn-danger m-2 shadow">elimina</button>
+						<button	@click="viewUserNotes(user.id)"	class="btn btn-info m-2 shadow">visualizza note</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
-	<div class="toast-container position-fixed bottom-0 end-0 p-3">
-	<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" ref="adminToast">
-	<div class="toast-header">
-	<strong class="me-auto">notifica</strong>
-	<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-	</div>
-	<div class="toast-body">
-	{{ toastMessage }}
-	</div>
-	</div>
-	</div>
-
+		<div class="toast-container p-3">
+			<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" ref="adminToast">
+				<div class="toast-header">
+					<strong class="me-auto">notifica</strong>
+					<button type="button" class="btn btn-close shadow" data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+				<div class="toast-body">
+					{{ toastMessage }}
+				</div>
+			</div>
+		</div>
 	</div>
 	`,
 

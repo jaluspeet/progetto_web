@@ -1,52 +1,51 @@
 const Notes = {
 	template: `
-	<div class="container mt-3">
-	<div class="cool-box d-flex justify-content-between align-items-center mb-4 p-3">
-	<h1>blocco note</h1>
-	<button @click="logout" class="btn btn-danger">logout</button>
-	</div>
+	<div class="container mt-4">
+		<div class="jumbotron d-flex justify-content-between align-items-center mb-4 p-3">
+			<h1>blocco note</h1>
+			<button @click="logout" class="btn btn-danger shadow">logout</button>
+		</div>
 
-	<div class="cool-box p-3 mb-4">
-	<form @submit.prevent="addnote" class="mb-4">
-	<div class="mb-3">
-	<input type="text" v-model="newnotetitle" class="form-control" placeholder="titolo" required>
-	</div>
-	<div class="mb-3">
-	<textarea v-model="newnotecontent" class="form-control" placeholder="contenuto" required></textarea>
-	</div>
-	<button type="submit" class="btn btn-primary">salva nota</button>
-	</form>
-	</div>
+		<div class="shadow p-3 mb-4">
+			<form @submit.prevent="addnote" class="mb-1">
+				<div class="mb-3">
+					<input type="text" v-model="newnotetitle" class="form-control" placeholder="titolo" required>
+				</div>
+				<div class="mb-3">
+					<textarea v-model="newnotecontent" class="form-control" placeholder="contenuto" required></textarea>
+				</div>
+				<button type="submit" class="btn btn-info shadow">salva nota</button>
+			</form>
+		</div>
 
-	<div class="cool-box p-3 mb-4">
-	<ul class="list-group">
-	<li v-for="note in notes" :key="note.id" class="list-group-item">
-	<div class="d-flex justify-content-between align-items-center">
-	<div>
-	<h5>{{ note.title }}</h5>
-	<p>{{ note.content }}</p>
-	</div>
-	<div>
-	<button @click="editnote(note)" class="btn btn-warning btn-sm m-2">edit</button>
-	<button @click="deletenote(note.id)" class="btn btn-danger btn-sm">delete</button>
-	</div>
-	</div>
-	</li>
-	</ul>
-	</div>
+		<div class="shadow p-3 mb-4">
+			<ul class="list-group">
+				<li v-for="note in notes" :key="note.id" class="list-group-item">
+					<div class="d-flex justify-content-between align-items-center">
+						<div class="m-1">
+							<h5>{{ note.title }}</h5>
+							<p>{{ note.content }}</p>
+						</div>
+						<div>
+							<button @click="editnote(note)" class="btn btn-warning m-2 shadow">edit</button>
+							<button @click="deletenote(note.id)" class="btn btn-danger m-2 shadow">delete</button>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
 
-	<div class="toast-container position-fixed bottom-0 end-0 p-3">
-	<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" ref="notesToast">
-	<div class="toast-header">
-	<strong class="me-auto">Notification</strong>
-	<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-	</div>
-	<div class="toast-body">
-	{{ toastMessage }}
-	</div>
-	</div>
-	</div>
-
+		<div class="toast-container position-fixed bottom-0 end-0 p-3">
+			<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" ref="notesToast">
+				<div class="toast-header">
+					<strong class="me-auto">Notification</strong>
+					<button type="button" class="btn btn-close shadow" data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+				<div class="toast-body">
+					{{ toastMessage }}
+				</div>
+			</div>
+		</div>
 	</div>
 	`,
 
