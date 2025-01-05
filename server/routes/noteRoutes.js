@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
 
-// fetch
+// recupera note
 router.get('/', async (req, res) => {
 	try {
 		const userid = req.user.id;
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 	}
 });
 
-// add
+// crea nuova nota
 router.post('/', async (req, res) => {
 	try {
 		const userid = req.user.id;
@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
 	}
 });
 
-// edit
+// modifica nota
 router.put('/:id', async (req, res) => {
 	try {
 		const userid = req.user.id;
@@ -46,7 +46,7 @@ router.put('/:id', async (req, res) => {
 	}
 });
 
-// delete
+// elimina nota
 router.delete('/:id', async (req, res) => {
 	try {
 		const userid = req.user.id;

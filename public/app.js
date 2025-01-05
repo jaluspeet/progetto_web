@@ -3,6 +3,10 @@ import Notes from './pages/notes.js';
 import Signup from './pages/signup.js';
 import Admin from './pages/admin.js';
 
+// NOTE: per le pagine frontend si preferisce caricare le dipendenze via CDN, sarà dunque necessario
+// usare import invece che require e importare l'oggetto Vue / VueRouter
+
+// route
 const routes = [
 	{ path: '/', redirect: '/login' },
 	{ path: '/login', component: Login },
@@ -11,11 +15,13 @@ const routes = [
 	{ path: '/admin', component: Admin },
 ];
 
+// inizializzazione cronologia router
 const router = VueRouter.createRouter({
 	history: VueRouter.createWebHashHistory(),
 	routes,
 });
 
+// inizializzazione app vue
 const app = Vue.createApp({
 	data() {
 		return {
@@ -23,7 +29,10 @@ const app = Vue.createApp({
 			token: localStorage.getItem('token') || '',
 		};
 	},
+
 	watch: {
+
+		// gestione token
 		token(newVal) {
 			localStorage.setItem('token', newVal);
 			if (newVal) {
@@ -32,16 +41,21 @@ const app = Vue.createApp({
 				delete this.$axios.defaults.headers.common['Authorization'];
 			}
 		},
+
+		// gestione admin
 		isAdmin(newVal) {
 			localStorage.setItem('is_admin', newVal);
 		}
 	},
+
+	// imposta token
 	created() {
 		if (this.token) {
 			this.$axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
 		}
 	}
 });
+
 app.use(router);
 app.config.globalProperties.$axios = axios.create();
 app.mount('#app');

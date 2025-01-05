@@ -1,14 +1,15 @@
 CREATE DATABASE IF NOT EXISTS note_app;
 USE note_app;
 
--- drop existing tables
+-- drop tabelle preesistenti
 DROP TABLE IF EXISTS notes;
 DROP TABLE IF EXISTS users;
 
--- 'users' table
+-- tabella utenti
 CREATE TABLE users (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	username VARCHAR(255) NOT NULL UNIQUE,
+	email VARCHAR(255) NOT NULL UNIQUE,
 	password VARCHAR(255) NOT NULL,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -16,7 +17,7 @@ CREATE TABLE users (
 ALTER TABLE users
 ADD COLUMN is_admin BOOLEAN DEFAULT FALSE;
 
--- 'notes' table
+-- tabella note
 CREATE TABLE notes (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(255) NOT NULL,
@@ -26,14 +27,15 @@ CREATE TABLE notes (
 	FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- admins
-INSERT INTO users (username, password, is_admin) VALUES ('admin1', '$2b$10$EPQ9n84kOljlrCbpvhktN.5OquTLF1M6mNhwKAVElL3LaWGbCpQAS', TRUE);
-INSERT INTO users (username, password, is_admin) VALUES ('admin2', '$2b$10$TX2FMRkzA4boFk0EjUaSEOvzm1V6Fa3R86/BnTxn5MbVpHcRjals2', TRUE);
+-- admin preimpostati - le password sono state criptate con bcrypt (10 pass)
+INSERT INTO users (username, email, password, is_admin) VALUES
+    ('admin1', 'admin1@example.com', '$2b$10$EPQ9n84kOljlrCbpvhktN.5OquTLF1M6mNhwKAVElL3LaWGbCpQAS', TRUE),
+    ('admin2', 'admin2@example.com', '$2b$10$TX2FMRkzA4boFk0EjUaSEOvzm1V6Fa3R86/BnTxn5MbVpHcRjals2', TRUE);
 
--- Reference Queries (for informational purposes)
--- INSERT INTO users (username, password) VALUES (?, ?);
+-- query
+-- INSERT INTO users (username, email, password) VALUES (?, ?, ?);
 -- SELECT * FROM users WHERE username = ?;
 -- SELECT * FROM notes WHERE user_id = ?;
 -- INSERT INTO notes (title, content, user_id) VALUES (?, ?, ?);
--- UPDATE notes SET title, content = ? WHERE id = ? AND user_id = ?;
+-- UPDATE notes SET title = ?, content = ? WHERE id = ? AND user_id = ?;
 -- DELETE FROM notes WHERE id = ? AND user_id = ?;

@@ -1,0 +1,9 @@
+/* box container per note, elementi vari */
+.cool-box {
+	padding: 1rem;
+	border-radius: 1rem;
+	border: 0.5vmin solid darkgray;
+	box-shadow: 0.4rem 0.4rem gray;
+	overflow: hidden;
+	margin: 1rem;
+}

@@ -1,13 +1,18 @@
 const Admin = {
 	template: `
 	<div class="container mt-5">
-	<h1 class="text-center">admin dashboard</h1>
-	<button @click="logout" class="btn btn-danger mb-3">logout</button>
-	<table class="table table-striped">
+	<div class="cool-box d-flex justify-content-between align-items-center mb-4 p-3">
+	<h1>pannello di controllo</h1>
+	<button @click="logout" class="btn btn-danger">logout</button>
+	</div>
+
+	<div class="cool-box p-3">
+	<table class="table">
 	<thead>
 	<tr>
 	<th>id</th>
 	<th>username</th>
+	<th>email</th>
 	<th>is admin</th>
 	<th>actions</th>
 	</tr>
@@ -16,76 +21,103 @@ const Admin = {
 	<tr v-for="user in users" :key="user.id">
 	<td>{{ user.id }}</td>
 	<td>{{ user.username }}</td>
+	<td>{{ user.email }}</td>
 	<td>{{ user.is_admin ? 'yes' : 'no' }}</td>
 	<td>
-	<button
-	v-if="!user.is_admin"
-	@click="promoteuser(user.id)"
-	class="btn btn-warning btn-sm m-2">promote</button>
-	<button
-	@click="deleteuser(user.id)"
-	class="btn btn-danger btn-sm m-2">delete</button>
-	<button
-	@click="viewUserNotes(user.id)"
-	class="btn btn-info btn-sm m-2">notes</button>
+	<button v-if="!user.is_admin" @click="promoteuser(user.id)" class="btn btn-warning btn-sm m-2">promuovi</button>
+	<button	@click="deleteuser(user.id)" class="btn btn-danger btn-sm m-2">elimina</button>
+	<button	@click="viewUserNotes(user.id)"	class="btn btn-info btn-sm m-2">visualizza note</button>
 	</td>
 	</tr>
 	</tbody>
 	</table>
 	</div>
+
+	<div class="toast-container position-fixed bottom-0 end-0 p-3">
+	<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" ref="adminToast">
+	<div class="toast-header">
+	<strong class="me-auto">notifica</strong>
+	<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+	</div>
+	<div class="toast-body">
+	{{ toastMessage }}
+	</div>
+	</div>
+	</div>
+
+	</div>
 	`,
+
 	data() {
 		return {
 			users: [],
-			userNotes: [], // add a place to store fetched notes
+			userNotes: [],
+			toastMessage: '',
 		};
 	},
+
 	methods: {
+
+		// notifica toast
+		showToast(message) {
+			this.toastMessage = message;
+			const toastEl = this.$refs.adminToast;
+			const toast = new bootstrap.Toast(toastEl);
+			toast.show();
+		},
+
+		// recupera lista utenti (admin)
 		async fetchusers() {
 			try {
 				const token = localStorage.getItem('token');
 				const response = await this.$axios.get('/api/admin/users', {
 					headers: {
-						Authorization: `Bearer ${token}`, // Updated
+						Authorization: `Bearer ${token}`,
 					},
 				});
 				this.users = response.data;
 			} catch (error) {
 				console.error('errore nel recupero degli utenti:', error);
-				alert(`errore nel recupero degli utenti: ${error.response.data.message}`);
+				this.showToast(`errore nel recupero degli utenti: ${error.response.data.message}`);
 			}
 		},
+
+		// promuovi utente ad admin (admin)
 		async promoteuser(userid) {
 			try {
 				const token = localStorage.getItem('token');
 				await this.$axios.put(`/api/admin/promote/${userid}`, {}, {
 					headers: {
-						Authorization: `Bearer ${token}`, // Updated
+						Authorization: `Bearer ${token}`,
 					},
 				});
-				alert('utente promosso a admin con successo');
+				this.showToast('utente promosso a admin con successo');
 				this.fetchusers();
 			} catch (error) {
-				console.error('error promoting user:', error);
-				alert(`errore nella promozione dell'utente: ${error.response.data.message}`);
+				console.error('errore nella promozione dell\'utente', error);
+				this.showToast(`errore nella promozione dell'utente: ${error.response.data.message}`);
 			}
 		},
+
+		// elimina utente (admin)
 		async deleteuser(userid) {
 			if (!confirm('sei sicuro di voler eliminare questo utente?')) return;
 			try {
 				const token = localStorage.getItem('token');
 				await this.$axios.delete(`/api/admin/users/${userid}`, {
 					headers: {
-						Authorization: `Bearer ${token}`, // Updated
+						Authorization: `Bearer ${token}`,
 					},
 				});
-				alert('utente eliminato con successo!');
+				this.showToast('utente eliminato con successo!');
 				this.fetchusers();
 			} catch (error) {
-				console.error('error deleting user:', error);
-				alert(`errore nell'eliminazione dell'utente: ${error.response.data.message}`);
+				console.error('errore nell\'eliminazione dell\'utente:', error);
+				this.showToast(`errore nell'eliminazione dell'utente: ${error.response.data.message}`);
 			}
 		},
+
+		// visualizza numero note di un utente
 		async viewUserNotes(userid) {
 			try {
 				const token = localStorage.getItem('token');
@@ -94,33 +126,35 @@ const Admin = {
 						Authorization: `Bearer ${token}`,
 					},
 				});
-				this.userNotes = response.data; // store the fetched notes
-				console.log('User notes:', this.userNotes);
-				alert(`trovate ${this.userNotes.length} note per user ${userid}`);
-				// Display the notes as needed (e.g., modal or additional table)
+				this.userNotes = response.data;
+				const user = this.users.find(user => user.id === userid);
+				this.showToast(`trovate ${this.userNotes.length} note per utente: ${user.username}`);
 			} catch (error) {
-				console.error('error fetching user notes:', error);
-				alert(`errore note utente: ${error.response.data.message}`);
+				console.error('errore recupero note utente:', error);
+				this.showToast(`errore recupero note utente: ${error.response.data.message}`);
 			}
 		},
+
+		// logout
 		async logout() {
 			try {
 				const token = localStorage.getItem('token');
 				await this.$axios.post('/api/logout', null, {
 					headers: {
-						Authorization: `Bearer ${token}`, // Updated
+						Authorization: `Bearer ${token}`,
 					},
 				});
 				localStorage.removeItem('token');
 				localStorage.removeItem('is_admin');
-				alert('logout riuscito!');
+				this.showToast('logout riuscito!');
 				this.$router.push('/login');
 			} catch (error) {
-				console.error('error during logout:', error);
-				alert('logout fallito.');
+				console.error('errore durante il logout:', error);
+				this.showToast('errore durante il logout');
 			}
 		},
 	},
+
 	async created() {
 		await this.fetchusers();
 	},

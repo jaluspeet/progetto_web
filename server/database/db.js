@@ -1,4 +1,8 @@
 const mysql = require('mysql2/promise');
+
+// NOTE: utilizzo dotenv per non esporre credenziali del database
+// o informazioni sensibili sul repository
+
 require('dotenv').config();
 
 const pool = mysql.createPool({

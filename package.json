@@ -2,9 +2,11 @@
   "name": "progetto_web",
   "version": "1.0.0",
   "main": "server.js",
+  
   "scripts": {
     "server": "node server/server.js"
   },
+  
   "author": "",
   "license": "ISC",
   "description": "",

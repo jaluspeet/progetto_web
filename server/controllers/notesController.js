@@ -1,15 +1,17 @@
 const db = require('../database/db')
 
+// recupera note di un utente
 const getnotes = async (req, res) => {
 	try {
 		const userid = req.user.id
-		const [notes] = await db.query('select * from notes where user_id = ?', [userid])
+		const [notes] = await db.query('SELECT * from NOTES where user_id = ?', [userid])
 		res.json(notes)
 	} catch (error) {
 		res.status(500).json({ message: 'errore nel recupero delle note', error })
 	}
 }
 
+// crea nuova nota
 const addnote = async (req, res) => {
 	try {
 		const userid = req.user.id
@@ -22,6 +24,7 @@ const addnote = async (req, res) => {
 	}
 }
 
+// modifica nota
 const updatenote = async (req, res) => {
 	try {
 		const userid = req.user.id
@@ -39,6 +42,7 @@ const updatenote = async (req, res) => {
 	}
 }
 
+// elimina nota
 const deletenote = async (req, res) => {
 	try {
 		const userid = req.user.id
