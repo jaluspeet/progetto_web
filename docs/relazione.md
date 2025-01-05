@@ -37,6 +37,8 @@ L'obiettivo principale è stato creare una UI intuitiva e compatibile con dispos
 un interfaccia coerente basata sulle specifiche di boostrap.
 
 ### Mockup
+![mockup note](./media/mockup1.svg)
+![mockup login](./media/mockup2.svg)
 
 #### Elementi Specifici
 - **Navbar**: si adatta dinamicamente alle dimensioni dello schermo. Include un tasto riportante il logo che reindirizza alla pagina principale.
