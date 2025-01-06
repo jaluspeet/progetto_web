@@ -1,24 +1,27 @@
-# Relazione del progetto
+---
+title: "relazione - ingegneria dei sistemi web"
+author: [Jacopo Maria Spitaleri]
+date: "AA 2024/2025"
+...
 
-## Struttura del backend
+# Relazione del progetto
+Il progetto punta a un implementazione di un'applicazione web full-stack improntata più alla qualità e sicurezza del backend, mantenendo un frontend minimale e funzionale
+rispetto al precedente progetto di Fondamenti di Sistemi Web, improntato invece verso la parte visiva. Tuttavia, è stata posta attenzione a mantenere il sito accessibile e fruibile
+da dispositivi diversi tramite l'utilizzo corretto di tag e test della responsività.
+
+## Backend
 Il backend è stato sviluppato utilizzando **Node.js** con **Express** come framework principale.
 Il database relazionale è gestito con **MySQL**, con la gestione delle query SQL implementata direttamente tramite **Axios** per mantenere un maggiore livello di flessibilità
 e semplicità.
 
-### Architettura del backend
+### Architettura
 L'architettura del backend segue un approccio modulare:
 
-```mermaid
-graph LR
-    A[client] -->|api REST| B[router express]
-    B -->|route| C[controller]
-    C -->|logica backend| D[query SQL]
-    D -->|CRUD| E[DB MySQL]
-```
+![architettura_backend](./media/mermaid1.svg)
 
-### Feature Principali
+### Feature principali
 - **Autenticazione**: implementata con sessioni e middleware per gestione della sicurezza degli endpoint.
-- **CRUD completo**: CRUD su entità chiave come utenti e argomenti.
+- **CRUD**: CRUD su entità chiave come utenti e argomenti.
 - **API RESTful**: tutti gli endpoint seguono le politiche REST.
 
 #### Configurazione del Database
@@ -36,11 +39,10 @@ Il frontend è stato sviluppato con **HTML**, **CSS** e **JavaScript**, utilizza
 L'obiettivo principale è stato creare una UI intuitiva e compatibile con dispositivi mobili e desktop, cercando di limitare al minimo l'utilizzo di css custom per garantire
 un interfaccia coerente basata sulle specifiche di boostrap.
 
-### Mockup
 ![mockup note](./media/mockup1.svg)
 ![mockup login](./media/mockup2.svg)
 
-#### Elementi Specifici
+### Elementi Specifici
 - **Navbar**: si adatta dinamicamente alle dimensioni dello schermo. Include un tasto riportante il logo che reindirizza alla pagina principale.
 - **Pulsanti**: sfruttano il feedback visivo al clic nativo di bootstrap per migliorare l'interattività da mobile.
 - **Blocchi di testo**: posizionati in layout flessibile che varia tra verticale e orizzontale.
@@ -48,23 +50,8 @@ un interfaccia coerente basata sulle specifiche di boostrap.
 ## Diagramma dei Dati
 Il flusso dei dati tra il frontend e il backend è illustrato di seguito:
 
-```mermaid
-sequenceDiagram
-    participant Frontend
-    participant Backend
-    participant Database
+![flusso_dati](./media/mermaid2.svg)
 
-    Frontend->>Backend: Richiesta dati utente
-    Backend->>Database: Query su tabella `users`
-    Database-->>Backend: Risultati
-    Backend-->>Frontend: Risposta JSON
-```
-
-## Debug
+## Sviluppo e debug
 La gestione degli errori nel backend avviene tramite middleware dedicati. Gli errori vengono loggati direttamente in console per analisi durante lo sviluppo.
 L'utente viene notificato dell'esito delle sue azioni tramite notifiche toast.
-
-## Conclusione
-Il progetto punta a un implementazione di un'applicazione web full-stack improntata più alla qualità e sicurezza del backend, mantenendo un frontend minimale e funzionale
-rispetto al precedente progetto di Fondamenti di Sistemi Web, improntato invece verso la parte visiva. Tuttavia, è stata posta attenzione a mantenere il sito accessibile e fruibile
-da dispositivi diversi tramite l'utilizzo corretto di tag e test della responsività.
