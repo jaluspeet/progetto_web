@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
+const sanitize = require('../middleware/sanitize');
 
 // recupera note
 router.get('/', async (req, res) => {
@@ -14,7 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 // crea nuova nota
-router.post('/', async (req, res) => {
+router.post('/', sanitize.sanitizeNote, async (req, res) => {
 	try {
 		const userid = req.user.id;
 		const { title, content } = req.body;
@@ -28,7 +29,7 @@ router.post('/', async (req, res) => {
 });
 
 // modifica nota
-router.put('/:id', async (req, res) => {
+router.put('/:id', sanitize.sanitizeNote, async (req, res) => {
 	try {
 		const userid = req.user.id;
 		const { title, content } = req.body;

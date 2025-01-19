@@ -3,7 +3,7 @@ const Admin = {
 	<div class="container mt-4">
 		<div class="jumbotron d-flex mb-4 p-3 justify-content-between align-items-center">
 			<h1 class="mb-0">pannello di controllo</h1>
-			<button @click="logout" class="btn btn-danger shadow">logout</button>
+			<button @click="logout" class="btn btn-danger">logout</button>
 		</div>
 
 		<div class="shadow p-3">
@@ -24,9 +24,9 @@ const Admin = {
 						<td>{{ user.email }}</td>
 						<td>{{ user.is_admin ? 'yes' : 'no' }}</td>
 						<td>
-						<button v-if="!user.is_admin" @click="promoteuser(user.id)" class="btn btn-warning m-2 shadow">promuovi</button>
-						<button	@click="deleteuser(user.id)" class="btn btn-danger m-2 shadow">elimina</button>
-						<button	@click="viewUserNotes(user.id)"	class="btn btn-info m-2 shadow">visualizza note</button>
+						<button v-if="!user.is_admin" @click="promoteuser(user.id)" class="btn btn-warning m-2">promuovi</button>
+						<button	@click="deleteuser(user.id)" class="btn btn-danger m-2">elimina</button>
+							<button @click="viewUserInfo(user.id)" class="btn btn-info m-2">info</button>
 						</td>
 					</tr>
 				</tbody>
@@ -116,21 +116,18 @@ const Admin = {
 			}
 		},
 
-		// visualizza numero note di un utente
-		async viewUserNotes(userid) {
+		// visualizza info utente
+		async viewUserInfo(userid) {
 			try {
 				const token = localStorage.getItem('token');
 				const response = await this.$axios.get(`/api/admin/users/${userid}/notes`, {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
+					headers: { Authorization: `Bearer ${token}` },
 				});
 				this.userNotes = response.data;
 				const user = this.users.find(user => user.id === userid);
-				this.showToast(`trovate ${this.userNotes.length} note per utente: ${user.username}`);
+				this.showToast(`utente: ${user.username}, note totali: ${this.userNotes.length}`);
 			} catch (error) {
-				console.error('errore recupero note utente:', error);
-				this.showToast(`errore recupero note utente: ${error.response.data.message}`);
+				this.showToast(`errore recupero info utente: ${error.response.data.message}`);
 			}
 		},
 

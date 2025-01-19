@@ -15,16 +15,16 @@ const validateEmail = (email) => {
 // registrazione
 const signup = async (req, res) => {
 	try {
-		const { username, password, email } = req.body // Updated to include email
-		if (!validateEmail(email)) { // Added email validation
+		const { username, password, email } = req.body
+		if (!validateEmail(email)) {
 			return res.status(400).json({ message: 'Email non valida' })
 		}
-		const [existinguser] = await db.query('select * from users where username = ? OR email = ?', [username, email]) // Updated query to check username or email
+		const [existinguser] = await db.query('select * from users where username = ? OR email = ?', [username, email])
 		if (existinguser.length > 0) {
-			return res.status(409).json({ message: 'nome utente o email già esistente' }) // Updated message
+			return res.status(409).json({ message: 'nome utente o email già esistente' })
 		}
 		const hashedpassword = await bcrypt.hash(password, 10)
-		await db.query('insert into users (username, email, password) values (?, ?, ?)', [username, email, hashedpassword]) // Updated insert to include email
+		await db.query('insert into users (username, email, password) values (?, ?, ?)', [username, email, hashedpassword])
 		res.status(201).json({ message: 'utente creato con successo' })
 	} catch (error) {
 		res.status(500).json({ message: 'errore nella creazione dell\'utente', error })

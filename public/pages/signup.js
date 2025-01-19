@@ -3,7 +3,7 @@ const Signup = {
 	<div class="container mt-4 col-4">
 		<div class="p-4">
 			<h1 class="text-center mb-4">registrati</h1>
-			<form @submit.prevent="handlesignup" class="shadow p-4" style="max-width: 400px;">
+			<form @submit.prevent="handlesignup" class="shadow p-4">
 				<div class="mb-3">
 					<label for="username" class="form-label">username</label>
 					<input type="text" v-model="username" class="form-control" required>
@@ -16,7 +16,7 @@ const Signup = {
 					<label for="password" class="form-label">password</label>
 					<input type="password" v-model="password" class="form-control" required>
 				</div>
-				<button type="submit" class="btn btn-primary w-100 shadow">registrati</button>
+				<button type="submit" class="btn btn-primary w-100">registrati</button>
 			</form>
 			<p class="text-center mt-3">hai già un account? <router-link to="/login">login</router-link></p>
 		</div>
@@ -25,7 +25,7 @@ const Signup = {
 			<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" ref="signupToast">
 				<div class="toast-header">
 					<strong class="me-auto">Notification</strong>
-					<button type="button" class="btn btn-close shadow" data-bs-dismiss="toast" aria-label="Close"></button>
+					<button type="button" class="btn btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 				</div>
 				<div class="toast-body">
 					{{ toastMessage }}
