@@ -1,7 +1,6 @@
 const Notes = {
     template: `
     <div class="container mt-4">
-
         <div class="jumbotron d-flex justify-content-between align-items-center mb-2">
             <h1>blocco note</h1>
             <div class="d-flex">
@@ -11,52 +10,51 @@ const Notes = {
         </div>
 
         <div class="row mb-4">
-            <div class="border p-3 mb-2 col-7">
-                <form @submit.prevent="addnote">
-
+            <div class="border p-4 col-7">
+                <form @submit.prevent="addNote">
                     <div class="d-flex mb-2">
-                        <input type="text" v-model="newnotetitle" class="form-control" placeholder="titolo" required>
+                        <input type="text" v-model="newNoteTitle" class="form-control" placeholder="titolo" required>
                         <button type="submit" class="btn btn-info mx-2">✓</button>
                     </div>
-
                     <div class="d-flex mb-2">
-                        <textarea :value="newnotecontent" @input="updateNewNoteContent" class="form-control" placeholder="contenuto" required></textarea>
+                        <textarea v-model="newNoteContent" class="form-control" placeholder="contenuto" required></textarea>
                     </div>
-
                 </form>
             </div>
-
-            <div class="border p-3 mb-2 col-5" v-html="compiledNewNoteMarkdown"></div>
+            <div class="border p-3 col-5" v-html="compiledNewNoteMarkdown"></div>
         </div>
 
         <div class="row mb-4">
-            <div class="shadow border p-3 mb-4">
-                <ul class="list-group">
-                    <li v-for="note in filteredNotes" :key="note.id" class="list-group-item p-4">
+            <div class="border">
+                <ul class="list-group p-3">
+                    <li v-for="note in filteredNotes" :key="note.id" class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center">
 
-                            <div class="m-2 flex-grow-1" v-if="editnoteid !== note.id">
+                            <div class="flex-grow-1 p-4" v-if="editNoteId !== note.id">
                                 <h5>{{ note.title }}</h5>
                                 <div v-html="convertMarkdown(note.content)"></div>
                             </div>
 
-                            <div class="m-1 flex-grow-1" v-else>
+                            <div class="flex-grow-1 p-4" v-else>
+
                                 <div class="d-flex">
-                                    <input type="text" v-model="editnotetitle" class="form-control mb-2 w-50" placeholder="titolo" required>
+                                    <input type="text" v-model="editNoteTitle" class="form-control m-4" placeholder="titolo" required>
                                 </div>
+
                                 <div class="d-flex">
-                                    <textarea :value="editnotecontent" @input="updateEditNoteContent" class="form-control w-50" placeholder="contenuto" required></textarea>
-                                    <div class="w-50 p-2 border m-1" v-html="compiledEditNoteMarkdown"></div>
+                                    <textarea v-model="editNoteContent" class="form-control w-50 mx-2" placeholder="contenuto" required></textarea>
+                                    <div class="w-50 border mx-2 p-4" v-html="compiledEditNoteMarkdown"></div>
                                 </div>
                             </div>
 
                             <div class="d-flex flex-column">
-                                <button v-if="editnoteid !== note.id" @click="editnote(note)" class="btn btn-warning mb-2">✎</button>
-                                <button v-if="editnoteid === note.id" @click="savenote(note.id)" class="btn btn-success mb-2">✓</button>
-                                <button @click="deletenote(note.id)" class="btn btn-danger mb-2">X</button>
-                                <button @click="exportNote(note)" class="btn btn-primary mb-2">↓</button>
-                                <button @click="shareNote(note)" class="btn btn-secondary mb-2">⇪</button>
+                                <button v-if="editNoteId !== note.id" @click="editNote(note)" class="btn btn-warning m-2">✎</button>
+                                <button v-if="editNoteId === note.id" @click="saveNote(note.id)" class="btn btn-success m-2">✓</button>
+                                <button @click="deleteNote(note.id)" class="btn btn-danger m-2">X</button>
+                                <button @click="exportNote(note)" class="btn btn-primary m-2">↓</button>
+                                <button @click="shareNote(note)" class="btn btn-secondary m-2">⇪</button>
                             </div>
+
                         </div>
                     </li>
                 </ul>
@@ -80,11 +78,11 @@ const Notes = {
     data() {
         return {
             notes: [],
-            newnotetitle: '',
-            newnotecontent: '',
-            editnoteid: null,
-            editnotetitle: '',
-            editnotecontent: '',
+            newNoteTitle: '',
+            newNoteContent: '',
+            editNoteId: null,
+            editNoteTitle: '',
+            editNoteContent: '',
             toastMessage: '',
             searchQuery: '',
         };
@@ -92,10 +90,10 @@ const Notes = {
 
     computed: {
         compiledNewNoteMarkdown() {
-            return this.convertMarkdown(this.newnotecontent);
+            return this.convertMarkdown(this.newNoteContent);
         },
         compiledEditNoteMarkdown() {
-            return this.convertMarkdown(this.editnotecontent);
+            return this.convertMarkdown(this.editNoteContent);
         },
         filteredNotes() {
             if (!this.searchQuery) {
@@ -111,7 +109,7 @@ const Notes = {
 
     methods: {
 
-        // notifica toast
+        // notifica
         showToast(message) {
             this.toastMessage = message;
             const toastEl = this.$refs.notesToast;
@@ -119,8 +117,8 @@ const Notes = {
             toast.show();
         },
 
-        // recupera lista utenti
-        async fetchnotes() {
+        // carica note dal database
+        async fetchNotes() {
             try {
                 const token = localStorage.getItem('token');
                 const response = await this.$axios.get('/api/notes', {
@@ -135,41 +133,38 @@ const Notes = {
             }
         },
 
-        // crea nuova nota
-        async addnote() {
+        // aggiungi nota
+        async addNote() {
             const token = localStorage.getItem('token');
             try {
                 const response = await this.$axios.post('/api/notes', {
-                    title: this.newnotetitle,
-                    content: this.newnotecontent,
+                    title: this.newNoteTitle,
+                    content: this.newNoteContent,
                 }, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
                 this.notes.push(response.data);
-                this.newnotetitle = '';
-                this.newnotecontent = '';
+                this.resetNewNoteFields();
             } catch (error) {
                 console.error('errore:', error);
                 this.showToast(`aggiunta della nota fallita: ${error.response.data.message}`);
             }
         },
 
-        // salva nota modificata
-        savenote(noteId) {
+        // salva nota
+        saveNote(noteId) {
             const note = this.notes.find(n => n.id === noteId);
             if (note) {
-                note.title = this.editnotetitle;
-                note.content = this.editnotecontent;
-                this.editnoteid = null;
-                this.editnotetitle = '';
-                this.editnotecontent = '';
+                note.title = this.editNoteTitle;
+                note.content = this.editNoteContent;
+                this.resetEditNoteFields();
             }
         },
 
-        // elimina nota preesistente
-        async deletenote(id) {
+        // elimina nota
+        async deleteNote(id) {
             try {
                 const token = localStorage.getItem('token');
                 await this.$axios.delete(`/api/notes/${id}`, {
@@ -185,10 +180,11 @@ const Notes = {
             }
         },
 
-        editnote(note) {
-            this.editnoteid = note.id;
-            this.editnotetitle = note.title;
-            this.editnotecontent = note.content;
+        // modifica nota
+        editNote(note) {
+            this.editNoteId = note.id;
+            this.editNoteTitle = note.title;
+            this.editNoteContent = note.content;
         },
 
         // logout
@@ -223,22 +219,9 @@ const Notes = {
             return container.innerHTML;
         },
 
-        // aggiorna contenuto nuova nota
-        updateNewNoteContent(event) {
-            this.newnotecontent = event.target.value;
-        },
-
-        // aggiorna contenuto nota modificata
-        updateEditNoteContent(event) {
-            this.editnotecontent = event.target.value;
-        },
-
-        // esporta nota in PDF
+        // esporta nota in pdf
         async exportNote(note) {
-            const doc = new jspdf.jsPDF({
-                format: 'a4'
-            });
-
+            const doc = new jspdf.jsPDF({ format: 'a4' });
             const container = document.createElement('div');
             container.innerHTML = this.convertMarkdown(note.content);
 
@@ -277,11 +260,23 @@ const Notes = {
                 this.showToast('condivisione fallita.');
             }
         },
+
+
+        // utils
+        resetNewNoteFields() {
+            this.newNoteTitle = '';
+            this.newNoteContent = '';
+        },
+
+        resetEditNoteFields() {
+            this.editNoteId = null;
+            this.editNoteTitle = '';
+            this.editNoteContent = '';
+        }
     },
 
-    // recupera note quando la pagina viene caricata
     async created() {
-        await this.fetchnotes();
+        await this.fetchNotes();
     },
 };
 
