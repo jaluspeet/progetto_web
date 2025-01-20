@@ -142,7 +142,6 @@ const Admin = {
 				});
 				localStorage.removeItem('token');
 				localStorage.removeItem('is_admin');
-				this.showToast('logout riuscito!');
 				this.$router.push('/login');
 			} catch (error) {
 				console.error('errore durante il logout:', error);

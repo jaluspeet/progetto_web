@@ -9,38 +9,38 @@ const Notes = {
         <div class="shadow p-3 mb-4">
             <form @submit.prevent="addnote" class="mb-1">
                 <div class="mb-3">
-                    <input type="text" v-model="newnotetitle" class="form-control" placeholder="titolo" required>
+                    <input type="text" v-model="newnotetitle" class="form-control w-100" placeholder="titolo" required>
                 </div>
                 <div class="mb-3">
-                    <textarea v-model="newnotecontent" class="form-control" placeholder="contenuto" required></textarea>
+                    <textarea v-model="newnotecontent" class="form-control w-100" placeholder="contenuto" required @paste="handlePaste"></textarea>
                 </div>
                 <button type="submit" class="btn btn-info">salva nota</button>
             </form>
         </div>
 
-        <div class="shadow p-3 mb-4">
+        <div class="shadow mb-4">
             <ul class="list-group">
-                <li v-for="note in notes" :key="note.id" class="list-group-item">
+                <li v-for="note in notes" :key="note.id" class="list-group-item p-4">
                     <div class="d-flex justify-content-between align-items-center">
-                        <div class="m-1" v-if="editnoteid !== note.id">
+                        <div class="m-1 flex-grow-1" v-if="editnoteid !== note.id">
                             <h5>{{ note.title }}</h5>
-                            <p>{{ note.content }}</p>
+                            <div v-html="convertMarkdown(note.content)"></div>
                         </div>
-                        <div class="m-1" v-else>
-                            <input type="text" v-model="editnotetitle" class="form-control mb-2" placeholder="titolo" required>
-                            <textarea v-model="editnotecontent" class="form-control" placeholder="contenuto" required></textarea>
+                        <div class="m-1 flex-grow-1" v-else>
+                            <input type="text" v-model="editnotetitle" class="form-control mb-2 w-100" placeholder="titolo" required>
+                            <textarea v-model="editnotecontent" class="form-control w-100" placeholder="contenuto" required @paste="handlePaste"></textarea>
                         </div>
-                        <div>
-                            <button v-if="editnoteid !== note.id" @click="editnote(note)" class="btn btn-warning m-2">edit</button>
-                            <button v-if="editnoteid === note.id" @click="savenote(note.id)" class="btn btn-success m-2">save</button>
-                            <button @click="deletenote(note.id)" class="btn btn-danger m-2">delete</button>
+                        <div class="d-flex flex-column m-2">
+                            <button v-if="editnoteid !== note.id" @click="editnote(note)" class="btn btn-warning mb-2">edit</button>
+                            <button v-if="editnoteid === note.id" @click="savenote(note.id)" class="btn btn-success mb-2">save</button>
+                            <button @click="deletenote(note.id)" class="btn btn-danger mb-2">delete</button>
                         </div>
                     </div>
                 </li>
             </ul>
         </div>
 
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 11">
             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" ref="notesToast">
                 <div class="toast-header">
                     <strong class="me-auto">Notification</strong>
@@ -87,7 +87,7 @@ const Notes = {
                 });
                 this.notes = response.data;
             } catch (error) {
-                console.error('error:', error);
+                console.error('errore:', error);
                 this.showToast(`recupero delle note fallito: ${error.response.data.message}`);
             }
         },
@@ -108,31 +108,20 @@ const Notes = {
                 this.newnotetitle = '';
                 this.newnotecontent = '';
             } catch (error) {
-                console.error('error:', error);
+                console.error('errore:', error);
                 this.showToast(`aggiunta della nota fallita: ${error.response.data.message}`);
             }
         },
 
         // salva nota modificata
-        async savenote(id) {
-            const token = localStorage.getItem('token');
-            try {
-                const response = await this.$axios.put(`/api/notes/${id}`, {
-                    title: this.editnotetitle,
-                    content: this.editnotecontent,
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                const index = this.notes.findIndex(note => note.id === id);
-                this.notes.splice(index, 1, response.data);
+        savenote(noteId) {
+            const note = this.notes.find(n => n.id === noteId);
+            if (note) {
+                note.title = this.editnotetitle;
+                note.content = this.editnotecontent;
                 this.editnoteid = null;
                 this.editnotetitle = '';
                 this.editnotecontent = '';
-            } catch (error) {
-                console.error('error:', error);
-                this.showToast(`aggiornamento della nota fallito: ${error.response.data.message}`);
             }
         },
 
@@ -148,7 +137,7 @@ const Notes = {
                 this.notes = this.notes.filter(note => note.id !== id);
                 this.showToast('nota eliminata con successo.');
             } catch (error) {
-                console.error('error:', error);
+                console.error('errore:', error);
                 this.showToast(`eliminazione della nota fallita: ${error.response.data.message}`);
             }
         },
@@ -170,13 +159,44 @@ const Notes = {
                 });
                 localStorage.removeItem('token');
                 localStorage.removeItem('is_admin');
-                this.showToast('logout riuscito!');
                 this.$router.push('/login');
             } catch (error) {
-                console.error('error:', error);
+                console.error('errore:', error);
                 this.showToast('logout fallito.');
             }
         },
+
+        // converti markdown in html
+        convertMarkdown(content) {
+            return marked.parse(content);
+        },
+
+        // incolla e comprimi immagini
+        handlePaste(event) {
+            const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+            for (const item of items) {
+                if (item.type.indexOf('image') !== -1) {
+                    const file = item.getAsFile();
+                    new Compressor(file, {
+                        quality: 0.1,
+                        maxWidth: 100,
+                        success: (compressedResult) => {
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                                const base64Image = event.target.result;
+                                const imageMarkdown = `![Image](${base64Image})`;
+                                this.newnotecontent += `\n${imageMarkdown}`;
+                            };
+                            reader.readAsDataURL(compressedResult);
+                        },
+                        error(err) {
+                            console.error('compressione fallita:', err);
+                            this.showToast('compressione immagine fallita.');
+                        },
+                    });
+                }
+            }
+        }
     },
 
     // recupera note quando la pagina viene caricata

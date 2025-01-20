@@ -73,7 +73,6 @@ const Signup = {
 					email: this.email,
 					password: this.password,
 				})
-				this.showToast('registrazione riuscita!')
 				this.$router.push('/login')
 			} catch (error) {
 				if (error.response && error.response.status === 409) {
