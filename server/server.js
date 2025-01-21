@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
 const noteRoutes = require('./routes/noteRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const accountRoutes = require('./routes/accountRoutes');
 const authenticate = require('./middleware/authenticate');
 
 // inizializzazione express
@@ -20,13 +21,13 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api', authRoutes);
 app.use('/api/notes', authenticate, noteRoutes);
 app.use('/api/admin', authenticate, adminRoutes);
+app.use('/api/account', authenticate, accountRoutes);
 
 app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, '../public', 'index.html'));
+    res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
 // avvio server in ascolto
 app.listen(PORT, () => {
-	console.log(`server in esecuzione su http://localhost:${PORT}`);
+    console.log(`server in esecuzione su http://localhost:${PORT}`);
 });
-
