@@ -21,8 +21,9 @@ const addnote = async (req, res) => {
 		const userid = req.user.id;
 		const { title, content } = req.body;
 		const [result] = await db.query('INSERT INTO notes (title, content, user_id) VALUES (?, ?, ?)', [title, content, userid]);
-		const newnote = { id: result.insertId, title, content, tags: [] };
-		res.status(201).json(newnote);
+		const [newNote] = await db.query('SELECT id, title, content, created_at FROM notes WHERE id = ?', [result.insertId]);
+		newNote[0].tags = [];
+		res.status(201).json(newNote[0]);
 	} catch (error) {
 		res.status(500).json({ message: 'errore nell\'aggiunta della nota', error });
 	}

@@ -5,10 +5,10 @@ const bcrypt = require('bcrypt');
 const getAccountInfo = async (req, res) => {
 	try {
 		const userId = req.user.id;
-		const [user] = await db.query('SELECT username, email FROM users WHERE id = ?', [userId]);
+		const [user] = await db.query('SELECT username, email, created_at FROM users WHERE id = ?', [userId]);
 		const [notes] = await db.query('SELECT COUNT(*) AS noteCount FROM notes WHERE user_id = ?', [userId]);
 		if (user.length > 0) {
-			res.json({ username: user[0].username, email: user[0].email, noteCount: notes[0].noteCount });
+			res.json({ username: user[0].username, email: user[0].email, created_at: user[0].created_at, noteCount: notes[0].noteCount });
 		} else {
 			res.status(404).json({ message: 'utente non trovato' });
 		}

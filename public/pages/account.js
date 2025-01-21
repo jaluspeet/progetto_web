@@ -18,6 +18,7 @@ const Account = {
 	<li class="list-group-item"><strong>username:</strong> {{ username }}</li>
 	<li class="list-group-item"><strong>email:</strong> {{ email }}</li>
 	<li class="list-group-item"><strong>note totali:</strong> {{ noteCount }}</li>
+	<li class="list-group-item"><strong>data di creazione:</strong> {{ createdAt }}</li>
 	</ul>
 	</div>
 
@@ -98,6 +99,7 @@ const Account = {
 			username: '',
 			email: '',
 			noteCount: 0,
+			createdAt: '',
 			newUsername: '',
 			newEmail: '',
 			newPassword: '',
@@ -119,6 +121,7 @@ const Account = {
 				this.username = response.data.username;
 				this.email = response.data.email;
 				this.noteCount = response.data.noteCount;
+				this.createdAt = new Date(response.data.created_at).toLocaleString();
 			} catch (error) {
 				console.error('Errore nel recupero delle informazioni account:', error);
 				this.showModal(`Errore nel recupero delle informazioni account: ${error.response.data.message}`);
