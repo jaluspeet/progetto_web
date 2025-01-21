@@ -24,10 +24,10 @@ app.use('/api/admin', authenticate, adminRoutes);
 app.use('/api/account', authenticate, accountRoutes);
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public', 'index.html'));
+	res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
 // avvio server in ascolto
 app.listen(PORT, () => {
-    console.log(`server in esecuzione su http://localhost:${PORT}`);
+	console.log(`server in esecuzione su http://localhost:${PORT}`);
 });

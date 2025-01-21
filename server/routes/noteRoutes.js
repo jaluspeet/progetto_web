@@ -15,4 +15,10 @@ router.put('/:id', sanitize.sanitizeNote, notesController.updatenote);
 // elimina nota
 router.delete('/:id', notesController.deletenote);
 
+// aggiungi tag a una nota
+router.post('/:id/tags', notesController.addTag);
+
+// rimuovi tag da una nota
+router.delete('/:id/tags', notesController.removeTag);
+
 module.exports = router;

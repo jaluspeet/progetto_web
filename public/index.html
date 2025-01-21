@@ -1,95 +1,95 @@
 <!DOCTYPE html>
 <html lang="it">
 
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>notevole!</title>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>notevole!</title>
 
-	<!-- bootstrap -->
-	<link href="style/bootstrap.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		<!-- bootstrap -->
+		<link href="style/bootstrap.css" rel="stylesheet">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-	<!-- markdown -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.6/marked.min.js"></script>
+		<!-- markdown -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.6/marked.min.js"></script>
 
-	<!-- export notes -->
-	<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-	<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+		<!-- export notes -->
+		<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+		<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
 
-	<!-- katex -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+		<!-- katex -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+		<script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
 
-	<!-- vue -->
-	<script src="https://unpkg.com/vue@3"></script>
-	<script src="https://unpkg.com/vue-router@4"></script>
+		<!-- vue -->
+		<script src="https://unpkg.com/vue@3"></script>
+		<script src="https://unpkg.com/vue-router@4"></script>
 
-	<!-- axios -->
-	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<!-- axios -->
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-	<!-- favicon -->
-	<link rel="icon" type="image/x-icon" href="images/favicon.ico">
-</head>
+		<!-- favicon -->
+		<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+	</head>
 
-<body class="d-flex flex-column min-vh-100">
+	<body class="d-flex flex-column min-vh-100">
 
-	<!-- navbar -->
-	<nav class="navbar navbar-expand-lg bg-primary mb-3">
-		<div class="container-fluid">
-			<a class="navbar-brand text-light" href="#"><img src="images/logo.svg" width="40" height="40"
+		<!-- navbar -->
+		<nav class="navbar navbar-expand-lg bg-primary mb-3">
+			<div class="container-fluid">
+				<a class="navbar-brand text-light" href="#"><img src="images/logo.svg" width="40" height="40"
 					alt="notevole!">notevole!</a>
-			<div class="collapse navbar-collapse">
-				<div class="btn-group ms-auto" role="group" aria-label="cambio modalità chiara / scura">
-					<button type="button" class="btn btn-primary">tema</button>
-					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false"></button>
-						<div class="dropdown-menu dropdown-menu-end">
-							<a class="dropdown-item" href="#" id="light-theme">chiaro</a>
-							<a class="dropdown-item" href="#" id="dark-theme">scuro</a>
+				<div class="collapse navbar-collapse">
+					<div class="btn-group ms-auto" role="group" aria-label="cambio modalità chiara / scura">
+						<button type="button" class="btn btn-primary">◐</button>
+						<div class="btn-group" role="group">
+							<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false"></button>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a class="dropdown-item" href="#" id="light-theme">chiaro</a>
+								<a class="dropdown-item" href="#" id="dark-theme">scuro</a>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+		</nav>
+
+		<!-- app vue -->
+		<div id="app" class="flex-grow-1">
+			<router-view></router-view>
 		</div>
-	</nav>
 
-	<!-- app vue -->
-	<div id="app" class="flex-grow-1">
-		<router-view></router-view>
-	</div>
+		<!-- footer -->
+		<footer class="bg-primary text-center text-light text-lg-start mt-4 p-3">
+			<p class="mb-0 text-center">progetto ingegneria dei sistemi web AA 2024/2025 - jacopo maria spitaleri</p>
+		</footer>
 
-	<!-- footer -->
-	<footer class="bg-primary text-center text-light text-lg-start mt-auto p-3">
-		<p class="mb-0 text-center">progetto ingegneria dei sistemi web AA 2024/2025 - jacopo maria spitaleri</p>
-	</footer>
+		<!-- script frontend principale -->
+		<script type="module" src="app.js"></script>
 
-	<!-- script frontend principale -->
-	<script type="module" src="app.js"></script>
+		<!-- trucchetto per far seguire a bootstrap la modalità chiara/scusa di sistema -->
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+				const matchPrefersLight = window.matchMedia('(prefers-color-scheme: light)');
+				const lightThemeButton = document.getElementById('light-theme');
+				const darkThemeButton = document.getElementById('dark-theme');
 
-	<!-- trucchetto per far seguire a bootstrap la modalità chiara/scusa di sistema -->
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-        const matchPrefersLight = window.matchMedia('(prefers-color-scheme: light)');
-        const lightThemeButton = document.getElementById('light-theme');
-        const darkThemeButton = document.getElementById('dark-theme');
+				function setTheme(theme) {
+					document.documentElement.setAttribute('data-bs-theme', theme);
+				}
 
-        function setTheme(theme) {
-            document.documentElement.setAttribute('data-bs-theme', theme);
-        }
+				lightThemeButton.addEventListener('click', () => setTheme('light'));
+				darkThemeButton.addEventListener('click', () => setTheme('dark'));
 
-        lightThemeButton.addEventListener('click', () => setTheme('light'));
-        darkThemeButton.addEventListener('click', () => setTheme('dark'));
+				setTheme(matchPrefersLight.matches ? 'light' : 'dark');
 
-        setTheme(matchPrefersLight.matches ? 'light' : 'dark');
-
-        matchPrefersLight.addEventListener('change', event => {
-            setTheme(event.matches ? 'light' : 'dark');
-        });
-    });
-	</script>
-</body>
+				matchPrefersLight.addEventListener('change', event => {
+					setTheme(event.matches ? 'light' : 'dark');
+				});
+			});
+		</script>
+	</body>
 
 </html>
