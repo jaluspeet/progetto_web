@@ -1,9 +1,9 @@
 const Login = {
 	template: `
 	<div class="container mt-4 col-4">
-		<div class="p-4">
+		<div class="p-4 rounded bg-secondary text-dark shadow">
 			<h1 class="text-center mb-4">login</h1>
-			<form @submit.prevent="handlelogin" class="shadow p-4">
+			<form @submit.prevent="handlelogin" class="p-4">
 				<div class="mb-4">
 					<label for="username" class="form-label">username</label>
 					<input type="text" v-model="username" class="form-control" required>
@@ -14,7 +14,7 @@ const Login = {
 				</div>
 				<button type="submit" class="btn btn-primary w-100">Login</button>
 			</form>
-			<p class="text-center mt-3">non hai un account? <router-link to="/signup">registrati</router-link></p>
+			<p class="text-center mt-3">non hai un account? <router-link to="/signup" style="color: blue" >registrati</router-link></p>
 		</div>
 
 		<div class="toast-container position-fixed bottom-0 end-0 p-3">

@@ -1,28 +1,28 @@
 const Admin = {
 	template: `
 	<div class="container mt-4">
-		<div class="jumbotron d-flex mb-4 p-3 justify-content-between align-items-center">
+		<div class="jumbotron d-flex justify-content-between align-items-center mb-2">
 			<h1 class="mb-0">pannello di controllo</h1>
 			<button @click="logout" class="btn btn-danger">logout</button>
 		</div>
 
-		<div class="shadow p-3">
-			<table class="table">
+		<div class="rounded bg-secondary p-4 shadow">
+			<table class="table table-striped table-hover table-info">
 				<thead>
 					<tr>
 						<th>id</th>
 						<th>username</th>
 						<th>email</th>
-						<th>amministratore</th>
+						<th>tipologia</th>
 						<th>opzioni</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="user in users" :key="user.id">
+					<tr v-for="user in users" :key="user.id" :class="{'table-danger': user.is_admin}">
 						<td>{{ user.id }}</td>
 						<td>{{ user.username }}</td>
 						<td>{{ user.email }}</td>
-						<td>{{ user.is_admin ? 'yes' : 'no' }}</td>
+						<td>{{ user.is_admin ? 'AMMINISTRATORE' : 'UTENTE' }}</td>
 						<td>
 						<button v-if="!user.is_admin" @click="promoteuser(user.id)" class="btn btn-warning m-2">promuovi</button>
 						<button	@click="deleteuser(user.id)" class="btn btn-danger m-2">elimina</button>

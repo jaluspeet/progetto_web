@@ -1,9 +1,9 @@
 const Signup = {
 	template: `
 	<div class="container mt-4 col-4">
-		<div class="p-4">
+		<div class="p-4 rounded bg-secondary text-dark shadow">
 			<h1 class="text-center mb-4">registrati</h1>
-			<form @submit.prevent="handlesignup" class="shadow p-4">
+			<form @submit.prevent="handlesignup" class="p-4">
 				<div class="mb-3">
 					<label for="username" class="form-label">username</label>
 					<input type="text" v-model="username" class="form-control" required>
@@ -18,7 +18,7 @@ const Signup = {
 				</div>
 				<button type="submit" class="btn btn-primary w-100">registrati</button>
 			</form>
-			<p class="text-center mt-3">hai già un account? <router-link to="/login">login</router-link></p>
+			<p class="text-center mt-3">hai già un account? <router-link to="/login" style="color: blue">login</router-link></p>
 		</div>
 
 		<div class="toast-container position-fixed bottom-0 end-0 p-3">

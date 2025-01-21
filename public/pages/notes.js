@@ -1,6 +1,6 @@
 const Notes = {
     template: `
-    <div class="container mt-4">
+        <div class="container mt-4">
         <div class="jumbotron d-flex justify-content-between align-items-center mb-2">
             <h1>blocco note</h1>
             <div class="d-flex">
@@ -9,55 +9,53 @@ const Notes = {
             </div>
         </div>
 
-        <div class="row mb-4">
-            <div class="border p-4 col-7">
-                <form @submit.prevent="addNote">
-                    <div class="d-flex mb-2">
-                        <input type="text" v-model="newNoteTitle" class="form-control" placeholder="titolo" required>
-                        <button type="submit" class="btn btn-info mx-2">✓</button>
-                    </div>
-                    <div class="d-flex mb-2">
-                        <textarea v-model="newNoteContent" class="form-control" placeholder="contenuto" required></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="border p-3 col-5" v-html="compiledNewNoteMarkdown"></div>
+        <div class="bg-secondary rounded-3 p-4 mb-4 shadow">
+            <form @submit.prevent="addNote">
+                <div class="d-flex mb-2 align-items-center">
+                    <input type="text" v-model="newNoteTitle" class="form-control me-2" placeholder="titolo" required>
+                    <button type="submit" class="btn btn-info">✓</button>
+                </div>
+                <div class="d-flex">
+                    <textarea v-model="newNoteContent" class="form-control w-50 me-2" placeholder="contenuto" required></textarea>
+                    <div class="bg-primary rounded p-3 w-50" v-html="compiledNewNoteMarkdown"></div>
+                </div>
+            </form>
         </div>
 
-        <div class="row mb-4">
-            <div class="border">
-                <ul class="list-group p-3">
-                    <li v-for="note in filteredNotes" :key="note.id" class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
-
-                            <div class="flex-grow-1 p-4" v-if="editNoteId !== note.id">
-                                <h5>{{ note.title }}</h5>
-                                <div v-html="convertMarkdown(note.content)"></div>
+        <div class="bg-secondary rounded-3 p-4 shadow">
+            <div class="d-flex flex-column">
+                <div v-for="note in filteredNotes" :key="note.id" class="my-1">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div v-if="editNoteId !== note.id">
+                                <h5 class="card-title">{{ note.title }}</h5>
                             </div>
-
-                            <div class="flex-grow-1 p-4" v-else>
-
-                                <div class="d-flex">
-                                    <input type="text" v-model="editNoteTitle" class="form-control m-4" placeholder="titolo" required>
-                                </div>
-
-                                <div class="d-flex">
-                                    <textarea v-model="editNoteContent" class="form-control w-50 mx-2" placeholder="contenuto" required></textarea>
-                                    <div class="w-50 border mx-2 p-4" v-html="compiledEditNoteMarkdown"></div>
-                                </div>
+                            <div v-else>
+                                <input type="text" v-model="editNoteTitle" class="form-control" placeholder="titolo" required>
                             </div>
-
-                            <div class="d-flex flex-column">
-                                <button v-if="editNoteId !== note.id" @click="editNote(note)" class="btn btn-warning m-2">✎</button>
-                                <button v-if="editNoteId === note.id" @click="saveNote(note.id)" class="btn btn-success m-2">✓</button>
-                                <button @click="deleteNote(note.id)" class="btn btn-danger m-2">X</button>
-                                <button @click="exportNote(note)" class="btn btn-primary m-2">↓</button>
-                                <button @click="shareNote(note)" class="btn btn-secondary m-2">⇪</button>
+                            <div class="d-flex">
+                                <button v-if="editNoteId !== note.id" @click="editNote(note)" class="btn btn-warning mx-1">✎</button>
+                                <button v-if="editNoteId === note.id" @click="saveNote(note.id)" class="btn btn-success mx-1">✓</button>
+                                <button @click="deleteNote(note.id)" class="btn btn-danger mx-1">✘</button>
+                                <button @click="exportNote(note)" class="btn btn-info mx-1">↓</button>
+                                <button @click="shareNote(note)" class="btn btn-success mx-1">↖</button>
                             </div>
-
                         </div>
-                    </li>
-                </ul>
+                        <div class="card-body d-flex">
+                            <div class="flex-grow-1">
+                                <div v-if="editNoteId !== note.id">
+                                    <div v-html="convertMarkdown(note.content)"></div>
+                                </div>
+                                <div v-else>
+                                    <div class="d-flex">
+                                        <textarea v-model="editNoteContent" class="form-control w-50" placeholder="contenuto" required></textarea>
+                                        <div class="w-50 p-4" v-html="compiledEditNoteMarkdown"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -249,9 +247,7 @@ const Notes = {
         async shareNote(note) {
             try {
                 const shareData = {
-                    title: note.title,
-                    text: note.content,
-                    url: window.location.href
+                    text: `${note.content.trim()}\n\nnota condivisa tramite notevole!`
                 };
                 await navigator.share(shareData);
                 this.showToast('nota condivisa con successo.');
