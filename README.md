@@ -15,8 +15,10 @@ DB_HOST = < indirizzo database >
 DB_USER = < username database >
 DB_PASSWORD = < password database >
 DB_NAME = note_app
-JWT_SECRET = < genera jwt con utils/gen_jwt.sh > 
+JWT_SECRET = < genera jwt con utils/gen_jwt.sh >
 ```
 
 e installare le dipendenze con `npm install`.
 dopodichè sarà possibile avviare il server tramite `npm run server` o `node server/server.js`.
+
+> Per una descrizione completa del progetto visitare la [relazione](/docs/relazione.md).
