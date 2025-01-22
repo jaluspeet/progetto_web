@@ -4,6 +4,15 @@ author: [Jacopo Maria Spitaleri]
 date: "AA 2024/2025"
 ...
 
+# Changelog
+- supporto markdown (completo di katex e code block highlighting)
+- supporto immagini
+- tracking data creazione delle note
+- pagina di gestione account
+- ricerca e tag
+- salting password utente
+- rework UI / UX
+
 # Relazione del progetto
 Il progetto punta a un implementazione di un'applicazione web full-stack improntata più alla qualità e sicurezza del backend, mantenendo un frontend minimale e funzionale
 rispetto al precedente progetto di Fondamenti di Sistemi Web, improntato invece verso la parte visiva. Tuttavia, è stata posta attenzione a mantenere il sito accessibile e fruibile

@@ -125,10 +125,10 @@ const Notes = {
 			toastMessage: '',
 			searchQuery: '',
 			noteToDelete: null,
-			visibleTagsNoteId: null, // Track the note ID for which tags are visible
+			visibleTagsNoteId: null,
 			newTag: '',
-			selectedTag: '', // Track the selected tag for filtering
-			allTags: [], // Store all unique tags
+			selectedTag: '',
+			allTags: [],
 		};
 	},
 
@@ -385,12 +385,12 @@ const Notes = {
 			}
 		},
 
-		// toggle tags visibility
+		// visibilità tag
 		toggleTags(noteId) {
 			this.visibleTagsNoteId = this.visibleTagsNoteId === noteId ? null : noteId;
 		},
 
-		// extract unique tags from notes
+		// estrai tag dalle note
 		extractTags() {
 			const tagsSet = new Set();
 			this.notes.forEach(note => {
