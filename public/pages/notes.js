@@ -284,12 +284,18 @@ const Notes = {
 			const html = marked.parse(content);
 			const container = document.createElement('div');
 			container.innerHTML = html;
+
+			container.querySelectorAll('pre code').forEach((block) => {
+				hljs.highlightBlock(block);
+			});
+
 			renderMathInElement(container, {
 				delimiters: [
 					{ left: "$$", right: "$$", display: true },
 					{ left: "$", right: "$", display: false }
 				]
 			});
+
 			return container.innerHTML;
 		},
 
