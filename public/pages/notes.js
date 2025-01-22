@@ -286,7 +286,7 @@ const Notes = {
 			container.innerHTML = html;
 
 			container.querySelectorAll('pre code').forEach((block) => {
-				hljs.highlightBlock(block);
+				hljs.highlightElement(block);
 			});
 
 			renderMathInElement(container, {
